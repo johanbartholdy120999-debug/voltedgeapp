@@ -1,0 +1,135 @@
+{
+    "Model 1 - Charger Health Score Prediction": {
+        "type": "regression",
+        "mae": 6.683,
+        "mse": 60.195,
+        "rmse": 7.759,
+        "r2": -0.126,
+        "feature_importance": {
+            "temperatur_c": 0.1683,
+            "spaending_v": 0.1802,
+            "stroem_a": 0.1884,
+            "fejl_antal": 0.0625,
+            "oppetid_procent": 0.1916,
+            "maks_effekt_kw": 0.0441,
+            "charger_age_days": 0.1649
+        }
+    },
+    "Model 2 - Anomaly Detection": {
+        "type": "anomaly_detection",
+        "normal_count": 475,
+        "anomaly_count": 25,
+        "contamination": 0.05,
+        "features": [
+            "temperatur_c",
+            "spaending_v",
+            "stroem_a",
+            "fejl_antal",
+            "oppetid_procent",
+            "maks_effekt_kw",
+            "charger_age_days"
+        ]
+    },
+    "Model 3 - Service Prediction Next 30 Days": {
+        "type": "classification",
+        "accuracy": 0.64,
+        "positive_cases": 126,
+        "negative_cases": 374,
+        "feature_importance": {
+            "driftsscore": 0.1645,
+            "temperatur_c": 0.1521,
+            "spaending_v": 0.1349,
+            "stroem_a": 0.1408,
+            "fejl_antal": 0.0615,
+            "oppetid_procent": 0.1495,
+            "maks_effekt_kw": 0.0495,
+            "charger_age_days": 0.1471
+        }
+    },
+    "Model 4 - Charging Duration Prediction": {
+        "type": "regression",
+        "mae": 55.249,
+        "mse": 4172.231,
+        "rmse": 64.593,
+        "r2": -0.075,
+        "feature_importance": {
+            "energi_kwh": 0.2546,
+            "temperatur_c": 0.235,
+            "batterikapacitet_kwh": 0.0808,
+            "maks_effekt_kw": 0.0712,
+            "hour": 0.1459,
+            "month": 0.1226,
+            "weekday": 0.0899
+        }
+    },
+    "Model 5 - Daily Energy Demand Forecast": {
+        "type": "regression",
+        "mae": 39.142,
+        "mse": 2405.845,
+        "rmse": 49.049,
+        "r2": 0.643,
+        "feature_importance": {
+            "session_count": 0.8124,
+            "avg_temperature": 0.0412,
+            "avg_price": 0.0152,
+            "avg_duration": 0.0245,
+            "month": 0.0103,
+            "weekday": 0.013,
+            "day_of_year": 0.022,
+            "previous_day_energy": 0.029,
+            "previous_7_day_energy": 0.0324
+        }
+    },
+    "Model 6 - Daily Revenue Forecast": {
+        "type": "regression",
+        "mae": 18.568,
+        "mse": 654.009,
+        "rmse": 25.574,
+        "r2": 0.985,
+        "feature_importance": {
+            "daily_energy": 0.958,
+            "session_count": 0.0008,
+            "avg_temperature": 0.0021,
+            "avg_price": 0.0304,
+            "avg_duration": 0.0016,
+            "month": 0.0007,
+            "weekday": 0.0009,
+            "day_of_year": 0.0019,
+            "previous_day_revenue": 0.0019,
+            "previous_7_day_revenue": 0.0018
+        }
+    },
+    "Model 7 - Customer Segmentation": {
+        "type": "clustering",
+        "clusters": {
+            "0": 13,
+            "1": 12,
+            "3": 11,
+            "2": 4
+        },
+        "features": [
+            "total_energy",
+            "total_spend",
+            "avg_duration",
+            "session_count",
+            "failed_sessions",
+            "interrupted_sessions"
+        ]
+    },
+    "Model 8 - Charger Failure Risk Classification": {
+        "type": "classification",
+        "accuracy": 0.84,
+        "positive_cases": 311,
+        "negative_cases": 189,
+        "feature_importance": {
+            "driftsscore": 0.0591,
+            "temperatur_c": 0.0734,
+            "spaending_v": 0.0666,
+            "stroem_a": 0.0808,
+            "fejl_antal": 0.5571,
+            "oppetid_procent": 0.072,
+            "maks_effekt_kw": 0.0261,
+            "charger_age_days": 0.0649
+        }
+    }
+}
