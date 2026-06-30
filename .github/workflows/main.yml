@@ -10,6 +10,7 @@ on:
       
 jobs:
   continuous-integration:
+
     name: CI - Test Application
     runs-on: ubuntu-latest
 
