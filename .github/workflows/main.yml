@@ -1,0 +1,87 @@
+name: VoltEdge CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  continuous-integration:
+    name: CI - Test Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify Imports
+        run: |
+          python -c "import database"
+          python -c "import models"
+          python -c "import main"
+
+      - name: Run Tests
+        run: |
+          python -m pytest -v
+
+      - name: Train ML Models
+        run: |
+          python train_model.py
+
+      - name: Generate Plots
+        run: |
+          python plot_models.py
+
+      - name: Start API
+        run: |
+          nohup python -m uvicorn main:app --host 0.0.0.0 --port 8000 &
+          sleep 20
+
+      - name: Test API
+        run: |
+          curl --fail http://localhost:8000/docs
+
+  continuous-delivery:
+    name: CD - Docker Image
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/voltedge-api:latest .
+
+      - name: Run Docker Container
+        run: |
+          docker run -d --name voltedge -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/voltedge-api:latest
+          sleep 20
+
+      - name: Test Docker API
+        run: |
+          curl --fail http://localhost:8000/docs
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/voltedge-api:latest
