@@ -1,4 +1,5 @@
 name: VoltEdge CI/CD
+
 on:
   push:
     branches:
@@ -6,10 +7,9 @@ on:
   pull_request:
     branches:
       - main
-    
+
 jobs:
   continuous-integration:
-
     name: CI - Test Application
     runs-on: ubuntu-latest
 
@@ -33,9 +33,9 @@ jobs:
           python -c "import models"
           python -c "import main"
 
-      - name: Run Tests
+      - name: Seed Database
         run: |
-          python -m pytest -v
+          python seed_database.py
 
       - name: Train ML Models
         run: |
@@ -45,10 +45,14 @@ jobs:
         run: |
           python plot_models.py
 
+      - name: Run Tests
+        run: |
+          pytest -v
+
       - name: Start API
         run: |
-          nohup python -m uvicorn main:app --host 0.0.0.0 --port 8000 &
-          sleep 20
+          uvicorn main:app --host 0.0.0.0 --port 8000 &
+          sleep 15
 
       - name: Test API
         run: |
@@ -76,10 +80,11 @@ jobs:
       - name: Run Docker Container
         run: |
           docker run -d --name voltedge -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/voltedge-api:latest
-          sleep 20
+          sleep 15
 
-      - name: Test Docker API
+      - name: Verify Container
         run: |
+          docker ps
           curl --fail http://localhost:8000/docs
 
       - name: Push Docker Image
