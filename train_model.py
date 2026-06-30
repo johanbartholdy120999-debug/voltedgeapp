@@ -621,6 +621,9 @@ def main():
 
 if __name__ == "__main__":
     main()
-  from plot_models import create_all_plots
+ from plot_models import create_all_plots
 
-create_all_plots()
+
+if __name__ == "__main__":
+    main()
+    create_all_plots()
