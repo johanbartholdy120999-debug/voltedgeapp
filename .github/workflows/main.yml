@@ -26,7 +26,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
+
       - name: Verify Imports
         run: |
           python -c "import database"
@@ -58,8 +58,8 @@ jobs:
         run: |
           curl --fail http://localhost:8000/docs
 
-  docker-image-artifact:
-    name: CD - Build Docker Image Artifact
+  docker-image:
+    name: CD - Build Docker Image
     needs: continuous-integration
     runs-on: ubuntu-latest
 
@@ -71,20 +71,34 @@ jobs:
         run: |
           docker build -t voltedge-api:latest .
 
+      - name: Verify Image
+        run: |
+          docker images
+
       - name: Run Docker Container
         run: |
           docker run -d --name voltedge -p 8000:8000 voltedge-api:latest
           sleep 20
 
-      - name: Test Docker API
+      - name: Test Docker Container
         run: |
           curl --fail http://localhost:8000/docs
 
-      - name: Save Docker Image As TAR
+      - name: Stop Container
         run: |
-          docker save voltedge-api:latest -o voltedge-api.tar
+          docker stop voltedge
+          docker rm voltedge
 
-      - name: Upload Docker Image Artifact
+      - name: Save Docker Image
+        run: |
+          docker save -o voltedge-api.tar voltedge-api:latest
+
+      - name: Verify TAR File
+        run: |
+          ls -lh
+          test -f voltedge-api.tar
+
+      - name: Upload Docker Image
         uses: actions/upload-artifact@v4
         with:
           name: VoltEdge-Docker-Image
