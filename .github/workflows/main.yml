@@ -59,7 +59,7 @@ jobs:
           curl --fail http://localhost:8000/docs
 
   continuous-deployment:
-    name: CD - Build & Push Docker Image
+    name: CD - Docker Hub Deployment
     needs: continuous-integration
     runs-on: ubuntu-latest
 
@@ -84,17 +84,11 @@ jobs:
         run: |
           docker images
 
-      - name: Run Docker Container
+      - name: Test Docker Container
         run: |
           docker run -d --name voltedge -p 8000:8000 YOUR_DOCKERHUB_USERNAME/voltedge-api:latest
           sleep 20
-
-      - name: Test Docker Container
-        run: |
           curl --fail http://localhost:8000/docs
-
-      - name: Stop Docker Container
-        run: |
           docker stop voltedge
           docker rm voltedge
 
