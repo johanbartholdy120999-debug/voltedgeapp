@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN chmod +x start.sh
+RUN chmod +x /app/start.sh
 
 EXPOSE 8000
 EXPOSE 8501
